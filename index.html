@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>TimbraWeb — Gestione Presenze</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,15 +11,17 @@
 body{font-family:system-ui,sans-serif;background:#f4f5f7;color:#1a1a1a;min-height:100vh}
 .hidden{display:none!important}
 
+/* NAV */
 nav{background:#1e3a5f;color:#fff;padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:56px;position:sticky;top:0;z-index:100}
 nav .logo{font-weight:700;font-size:1.1rem;flex:1}
 nav button{background:rgba(255,255,255,.12);border:none;color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.85rem}
 nav button:hover{background:rgba(255,255,255,.22)}
 
+/* LAYOUT */
 .page{max-width:960px;margin:0 auto;padding:1.5rem}
 .card{background:#fff;border-radius:12px;padding:1.25rem 1.5rem;box-shadow:0 1px 3px rgba(0,0,0,.07)}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:1rem}
 
+/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;border:none;cursor:pointer;font-size:.9rem;font-weight:500;transition:.15s}
 .btn-primary{background:#1e3a5f;color:#fff}.btn-primary:hover{background:#16305a}
 .btn-success{background:#16a34a;color:#fff}.btn-success:hover{background:#15803d}
@@ -29,23 +31,14 @@ nav button:hover{background:rgba(255,255,255,.22)}
 .btn-sm{padding:5px 12px;font-size:.8rem}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 
+/* FORMS */
 .form-group{margin-bottom:1rem}
 label{display:block;font-size:.82rem;font-weight:500;color:#555;margin-bottom:4px}
 input,select,textarea{width:100%;padding:8px 12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:.9rem;outline:none;transition:.15s}
 input:focus,select:focus{border-color:#1e3a5f;box-shadow:0 0 0 3px rgba(30,58,95,.1)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 
-.timbratura-hero{text-align:center;padding:2rem 1rem}
-.timbratura-hero .azienda-logo{max-height:80px;max-width:220px;object-fit:contain;margin-bottom:1rem}
-.timbratura-hero h2{font-size:1.4rem;color:#1e3a5f;margin-bottom:.3rem}
-.timbratura-hero .data{color:#666;font-size:.9rem;margin-bottom:1.5rem}
-.qr-box{display:inline-block;background:#fff;padding:16px;border-radius:12px;border:2px dashed #d1d5db;margin-bottom:1.5rem}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;max-width:240px;margin:.5rem auto}
-.pin-btn{padding:14px;font-size:1.1rem;font-weight:600;border-radius:8px;border:1.5px solid #d1d5db;background:#fff;cursor:pointer;transition:.1s}
-.pin-btn:hover{background:#f0f4f9;border-color:#1e3a5f}
-.pin-display{font-size:2rem;letter-spacing:.5rem;min-height:2.5rem;color:#1e3a5f;margin:.5rem 0}
-.azioni-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:320px;margin:0 auto}
-
+/* BADGE */
 .badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:.75rem;font-weight:600}
 .badge-green{background:#dcfce7;color:#15803d}
 .badge-yellow{background:#fef9c3;color:#854d0e}
@@ -53,6 +46,7 @@ input:focus,select:focus{border-color:#1e3a5f;box-shadow:0 0 0 3px rgba(30,58,95
 .badge-gray{background:#f1f5f9;color:#475569}
 .badge-blue{background:#dbeafe;color:#1d4ed8}
 
+/* TABLE */
 .table-wrap{overflow-x:auto;margin-top:1rem}
 table{width:100%;border-collapse:collapse;font-size:.88rem}
 th{background:#f8fafc;text-align:left;padding:10px 12px;border-bottom:2px solid #e2e8f0;font-weight:600;color:#475569;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
@@ -60,49 +54,178 @@ td{padding:9px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:#f8fafc}
 
+/* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
 .modal{background:#fff;border-radius:14px;padding:1.5rem;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
 .modal h3{font-size:1.1rem;margin-bottom:1.2rem;color:#1e3a5f}
 
+/* TOAST */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1e3a5f;color:#fff;padding:10px 18px;border-radius:10px;font-size:.88rem;z-index:999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 .toast.toast-ok{background:#16a34a}
 .toast.toast-err{background:#dc2626}
 
+/* TABS */
 .tabs{display:flex;gap:2px;background:#f1f5f9;padding:4px;border-radius:10px;margin-bottom:1.2rem}
 .tab{flex:1;text-align:center;padding:7px 12px;border-radius:8px;font-size:.85rem;cursor:pointer;color:#64748b;transition:.15s}
 .tab.active{background:#fff;color:#1e3a5f;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 
+/* SECTION HEADER */
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
 .section-header h2{font-size:1.15rem;color:#1e3a5f}
 
+/* LOGO PREVIEW */
 .logo-preview{width:80px;height:48px;object-fit:contain;border:1px solid #e2e8f0;border-radius:6px;background:#f8fafc}
 
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+.spin-big{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#1e3a5f;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.8);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem}
-.loading-overlay .spin-big{width:40px;height:40px;border:3px solid #e2e8f0;border-top-color:#1e3a5f;border-radius:50%;animation:spin .8s linear infinite}
+/* ── KIOSK ── */
+#sec-kiosk{min-height:100vh;background:#f4f5f7;display:flex;flex-direction:column}
 
-@media(max-width:580px){.form-row{grid-template-columns:1fr}.azioni-grid{grid-template-columns:1fr}}
+.kiosk-header{background:#1e3a5f;color:#fff;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.kiosk-header .az-info{display:flex;align-items:center;gap:1rem}
+.kiosk-header .az-logo{max-height:48px;max-width:140px;object-fit:contain;background:#fff;border-radius:6px;padding:4px}
+.kiosk-header h1{font-size:1.3rem;font-weight:700}
+.kiosk-header .kiosk-date{font-size:.85rem;opacity:.75;margin-top:2px}
+.kiosk-admin-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;white-space:nowrap}
+.kiosk-admin-btn:hover{background:rgba(255,255,255,.25)}
+
+.kiosk-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;padding:1.5rem;max-width:900px;margin:0 auto;width:100%}
+
+/* QR Panel */
+.kiosk-qr-panel{background:#fff;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.kiosk-qr-panel h3{font-size:1rem;color:#1e3a5f;font-weight:600;margin-bottom:.3rem}
+.kiosk-qr-panel p{font-size:.8rem;color:#888;margin-bottom:1rem;text-align:center}
+.qr-wrap{background:#fff;padding:14px;border-radius:10px;border:2px dashed #d1d5db}
+.kiosk-qr-sub{font-size:.72rem;color:#aaa;margin-top:.6rem;text-align:center}
+
+/* PIN Panel */
+.kiosk-pin-panel{background:#fff;border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.kiosk-pin-panel h3{font-size:1rem;color:#1e3a5f;font-weight:600;margin-bottom:.3rem}
+.kiosk-pin-panel>p{font-size:.82rem;color:#666;margin-bottom:1rem;text-align:center}
+.pin-display{font-size:2.4rem;letter-spacing:.6rem;min-height:3rem;color:#1e3a5f;font-weight:700;text-align:center;margin:.4rem 0 1rem}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;width:100%;max-width:260px}
+.pin-btn{padding:16px 0;font-size:1.2rem;font-weight:700;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:.12s;user-select:none}
+.pin-btn:hover{background:#e8f0fa;border-color:#1e3a5f}
+.pin-btn:active{transform:scale(.95)}
+.pin-btn.del{color:#dc2626;font-size:1rem}
+.pin-btn.ok{background:#1e3a5f;color:#fff;border-color:#1e3a5f;font-size:1rem}
+.pin-btn.ok:hover{background:#16305a}
+
+/* Azioni dipendente (kiosk) */
+.kiosk-dip-panel{display:none;flex-direction:column;align-items:center;width:100%}
+.kiosk-dip-panel.show{display:flex}
+.dip-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;width:100%}
+.dip-avatar{width:48px;height:48px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1d4ed8;font-size:1.1rem;flex-shrink:0}
+.azioni-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;width:100%;margin-top:.5rem}
+.azioni-grid .btn{padding:14px 8px;font-size:.95rem;justify-content:center;border-radius:10px}
+.kiosk-close{margin-top:.8rem;font-size:.8rem;color:#999;cursor:pointer;text-decoration:underline;background:none;border:none}
+
+/* Tablet fullscreen prompt */
+.kiosk-tip{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:#fff;font-size:.75rem;padding:6px 16px;border-radius:100px;z-index:50;pointer-events:none;opacity:.7}
+
+@media(max-width:640px){
+  .kiosk-body{grid-template-columns:1fr;gap:1rem}
+  .form-row{grid-template-columns:1fr}
+  .azioni-grid{grid-template-columns:1fr}
+}
+
+/* MISC */
+.aziende-link-box{background:#f0f4f9;border:1.5px solid #c7d8ec;border-radius:8px;padding:.6rem 1rem;font-size:.82rem;color:#1e3a5f;display:flex;align-items:center;gap:.5rem;word-break:break-all}
+.aziende-link-box button{flex-shrink:0;background:#1e3a5f;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:.75rem;cursor:pointer}
 </style>
 </head>
 <body>
 
-<nav id="navbar">
+<!-- NAV (solo per admin) -->
+<nav id="navbar" class="hidden">
   <span class="logo" id="nav-title">TimbraWeb</span>
-  <button id="btn-nav-admin" onclick="showSection('admin-login')">Admin</button>
-  <button id="btn-nav-logout" class="hidden" onclick="logout()">Esci</button>
+  <button id="btn-nav-logout" onclick="logout()">Esci</button>
 </nav>
 
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- LOADING -->
 <div class="loading-overlay hidden" id="loading-overlay">
   <div class="spin-big"></div>
   <p style="color:#1e3a5f;font-size:.9rem">Caricamento...</p>
 </div>
 
-<!-- ADMIN LOGIN -->
+<!-- ═══════════════════════════════════════════
+     KIOSK — pagina tablet azienda
+════════════════════════════════════════════ -->
+<div id="sec-kiosk" class="hidden">
+  <div class="kiosk-header">
+    <div class="az-info">
+      <img id="k-logo" class="az-logo hidden" src="" alt="logo">
+      <div>
+        <h1 id="k-nome">—</h1>
+        <div class="kiosk-date" id="k-date"></div>
+      </div>
+    </div>
+    <button class="kiosk-admin-btn" onclick="kioskAdminRequest()">Amministratore</button>
+  </div>
+
+  <div class="kiosk-body">
+
+    <!-- QR per smartphone -->
+    <div class="kiosk-qr-panel">
+      <h3>Timbra con smartphone</h3>
+      <p>Inquadra il QR con la fotocamera del tuo telefono</p>
+      <div class="qr-wrap"><div id="k-qr"></div></div>
+      <p class="kiosk-qr-sub" id="k-qr-expire">Valido fino a mezzanotte</p>
+    </div>
+
+    <!-- PIN da tablet -->
+    <div class="kiosk-pin-panel" id="k-pin-panel">
+      <h3>Timbra dal tablet</h3>
+      <p>Inserisci il tuo PIN personale</p>
+      <div class="pin-display" id="k-pin-display">—</div>
+      <div class="pin-grid">
+        <button class="pin-btn" onclick="pinDigit('1')">1</button>
+        <button class="pin-btn" onclick="pinDigit('2')">2</button>
+        <button class="pin-btn" onclick="pinDigit('3')">3</button>
+        <button class="pin-btn" onclick="pinDigit('4')">4</button>
+        <button class="pin-btn" onclick="pinDigit('5')">5</button>
+        <button class="pin-btn" onclick="pinDigit('6')">6</button>
+        <button class="pin-btn" onclick="pinDigit('7')">7</button>
+        <button class="pin-btn" onclick="pinDigit('8')">8</button>
+        <button class="pin-btn" onclick="pinDigit('9')">9</button>
+        <button class="pin-btn del" onclick="pinDel()">&#9003;</button>
+        <button class="pin-btn" onclick="pinDigit('0')">0</button>
+        <button class="pin-btn ok" onclick="pinConfirm()">OK</button>
+      </div>
+
+      <!-- Pannello azioni dipendente -->
+      <div class="kiosk-dip-panel" id="k-dip-panel">
+        <div class="dip-head">
+          <div class="dip-avatar" id="k-dip-avatar"></div>
+          <div>
+            <p style="font-weight:700;font-size:1rem" id="k-dip-nome"></p>
+            <p style="font-size:.8rem;color:#888" id="k-dip-ruolo"></p>
+          </div>
+          <span class="badge" id="k-dip-stato" style="margin-left:auto"></span>
+        </div>
+        <div class="azioni-grid">
+          <button class="btn btn-success" id="k-btn-entrata" onclick="timbra('entrata')">Entrata</button>
+          <button class="btn btn-warning" id="k-btn-pausa-in" onclick="timbra('pausa_inizio')">Inizio pausa</button>
+          <button class="btn btn-outline" id="k-btn-pausa-out" onclick="timbra('pausa_fine')">Fine pausa</button>
+          <button class="btn btn-danger" id="k-btn-uscita" onclick="timbra('uscita')">Uscita</button>
+        </div>
+        <button class="kiosk-close" onclick="closeDipPanel()">Chiudi</button>
+      </div>
+    </div>
+  </div>
+  <div class="kiosk-tip" id="kiosk-tip">Premi F11 per schermo intero</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADMIN LOGIN
+════════════════════════════════════════════ -->
 <div id="sec-admin-login" class="hidden">
   <div class="page" style="max-width:400px">
     <div class="card" style="margin-top:3rem">
@@ -111,12 +234,14 @@ tr:hover td{background:#f8fafc}
         <label>Password admin</label>
         <input type="password" id="admin-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
       </div>
-      <button class="btn btn-primary" style="width:100%" id="btn-login" onclick="adminLogin()">Accedi</button>
+      <button class="btn btn-primary" style="width:100%" onclick="adminLogin()">Accedi</button>
     </div>
   </div>
 </div>
 
-<!-- DASHBOARD ADMIN -->
+<!-- ═══════════════════════════════════════════
+     DASHBOARD ADMIN
+════════════════════════════════════════════ -->
 <div id="sec-admin" class="hidden">
   <div class="page">
     <div class="tabs">
@@ -135,7 +260,7 @@ tr:hover td{background:#f8fafc}
       </div>
       <div class="table-wrap card">
         <table>
-          <thead><tr><th>Logo</th><th>Nome</th><th>P.IVA</th><th>Dipendenti</th><th></th></tr></thead>
+          <thead><tr><th>Logo</th><th>Nome</th><th>P.IVA</th><th>Dipendenti</th><th>Link kiosk</th><th></th></tr></thead>
           <tbody id="tbody-aziende"></tbody>
         </table>
       </div>
@@ -146,15 +271,13 @@ tr:hover td{background:#f8fafc}
       <div class="section-header">
         <h2>Dipendenti</h2>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-          <select id="filter-az-dip" onchange="renderDipendenti()" style="width:200px">
-            <option value="">Tutte le aziende</option>
-          </select>
+          <select id="filter-az-dip" onchange="renderDipendenti()" style="width:200px"><option value="">Tutte le aziende</option></select>
           <button class="btn btn-primary btn-sm" onclick="openModal('modal-dipendente');resetModalDip()">+ Nuovo dipendente</button>
         </div>
       </div>
       <div class="table-wrap card">
         <table>
-          <thead><tr><th>Nome</th><th>Cognome</th><th>Azienda</th><th>Ruolo</th><th>Stato</th><th></th></tr></thead>
+          <thead><tr><th>Nome</th><th>Cognome</th><th>Azienda</th><th>Ruolo</th><th>Stato oggi</th><th></th></tr></thead>
           <tbody id="tbody-dipendenti"></tbody>
         </table>
       </div>
@@ -165,9 +288,7 @@ tr:hover td{background:#f8fafc}
       <div class="section-header">
         <h2>Presenze</h2>
         <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-          <select id="filter-az-pres" onchange="renderPresenze()" style="width:180px">
-            <option value="">Tutte le aziende</option>
-          </select>
+          <select id="filter-az-pres" onchange="renderPresenze()" style="width:180px"><option value="">Tutte le aziende</option></select>
           <input type="date" id="filter-data-pres" onchange="renderPresenze()" style="width:160px">
         </div>
       </div>
@@ -185,20 +306,16 @@ tr:hover td{background:#f8fafc}
       <div class="card" style="max-width:480px">
         <div class="form-group">
           <label>Azienda</label>
-          <select id="rep-azienda" style="width:100%" onchange="filterRepDip()">
-            <option value="">Tutte le aziende</option>
-          </select>
+          <select id="rep-azienda" style="width:100%" onchange="filterRepDip()"><option value="">Tutte le aziende</option></select>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label>Mese</label>
             <select id="rep-mese">
-              <option value="1">Gennaio</option><option value="2">Febbraio</option>
-              <option value="3">Marzo</option><option value="4">Aprile</option>
-              <option value="5">Maggio</option><option value="6">Giugno</option>
-              <option value="7">Luglio</option><option value="8">Agosto</option>
-              <option value="9">Settembre</option><option value="10">Ottobre</option>
-              <option value="11">Novembre</option><option value="12">Dicembre</option>
+              <option value="1">Gennaio</option><option value="2">Febbraio</option><option value="3">Marzo</option>
+              <option value="4">Aprile</option><option value="5">Maggio</option><option value="6">Giugno</option>
+              <option value="7">Luglio</option><option value="8">Agosto</option><option value="9">Settembre</option>
+              <option value="10">Ottobre</option><option value="11">Novembre</option><option value="12">Dicembre</option>
             </select>
           </div>
           <div class="form-group">
@@ -208,9 +325,7 @@ tr:hover td{background:#f8fafc}
         </div>
         <div class="form-group">
           <label>Dipendente (opzionale)</label>
-          <select id="rep-dipendente">
-            <option value="">Tutti i dipendenti</option>
-          </select>
+          <select id="rep-dipendente"><option value="">Tutti i dipendenti</option></select>
         </div>
         <button class="btn btn-success" onclick="exportCSV()">Scarica CSV</button>
       </div>
@@ -221,89 +336,26 @@ tr:hover td{background:#f8fafc}
       <div class="section-header"><h2>Impostazioni</h2></div>
       <div class="card" style="max-width:400px">
         <h3 style="font-size:.95rem;margin-bottom:1rem;color:#1e3a5f">Cambia password admin</h3>
-        <div class="form-group">
-          <label>Password attuale</label>
-          <input type="password" id="pw-old" placeholder="••••••••">
-        </div>
-        <div class="form-group">
-          <label>Nuova password</label>
-          <input type="password" id="pw-new" placeholder="••••••••">
-        </div>
-        <div class="form-group">
-          <label>Conferma nuova password</label>
-          <input type="password" id="pw-confirm" placeholder="••••••••">
-        </div>
+        <div class="form-group"><label>Password attuale</label><input type="password" id="pw-old"></div>
+        <div class="form-group"><label>Nuova password</label><input type="password" id="pw-new"></div>
+        <div class="form-group"><label>Conferma nuova password</label><input type="password" id="pw-confirm"></div>
         <button class="btn btn-primary" onclick="changeAdminPw()">Aggiorna password</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGINA TIMBRATURA -->
-<div id="sec-timbratura" class="hidden">
-  <div class="page" style="max-width:520px">
-    <div class="timbratura-hero">
-      <img id="az-logo-img" class="azienda-logo hidden" src="" alt="logo">
-      <h2 id="az-nome-h2">Azienda</h2>
-      <p class="data" id="az-data-p"></p>
-      <div class="qr-box">
-        <div id="qr-container"></div>
-        <p style="font-size:.75rem;color:#999;margin-top:8px">Scansiona per accedere</p>
-      </div>
-    </div>
-    <div class="card" id="form-pin">
-      <p style="text-align:center;font-size:.9rem;color:#555;margin-bottom:.5rem">Inserisci il tuo PIN personale</p>
-      <div class="pin-display" id="pin-display">—</div>
-      <div class="pin-grid">
-        <button class="pin-btn" onclick="pinDigit('1')">1</button>
-        <button class="pin-btn" onclick="pinDigit('2')">2</button>
-        <button class="pin-btn" onclick="pinDigit('3')">3</button>
-        <button class="pin-btn" onclick="pinDigit('4')">4</button>
-        <button class="pin-btn" onclick="pinDigit('5')">5</button>
-        <button class="pin-btn" onclick="pinDigit('6')">6</button>
-        <button class="pin-btn" onclick="pinDigit('7')">7</button>
-        <button class="pin-btn" onclick="pinDigit('8')">8</button>
-        <button class="pin-btn" onclick="pinDigit('9')">9</button>
-        <button class="pin-btn" onclick="pinClear()" style="color:#dc2626">C</button>
-        <button class="pin-btn" onclick="pinDigit('0')">0</button>
-        <button class="pin-btn" style="background:#1e3a5f;color:#fff;border-color:#1e3a5f" onclick="pinConfirm()">OK</button>
-      </div>
-    </div>
-    <div class="card hidden" id="panel-dip">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem">
-        <div style="width:42px;height:42px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1d4ed8;font-size:1rem" id="dip-avatar"></div>
-        <div>
-          <p style="font-weight:600" id="dip-nome-panel"></p>
-          <p style="font-size:.8rem;color:#888" id="dip-ruolo-panel"></p>
-        </div>
-        <span id="dip-stato-badge" class="badge" style="margin-left:auto"></span>
-      </div>
-      <div class="azioni-grid">
-        <button class="btn btn-success" id="btn-entrata" onclick="timbra('entrata')" disabled>Entrata</button>
-        <button class="btn btn-warning" id="btn-pausa-in" onclick="timbra('pausa_inizio')" disabled>Inizio pausa</button>
-        <button class="btn btn-outline" id="btn-pausa-out" onclick="timbra('pausa_fine')" disabled>Fine pausa</button>
-        <button class="btn btn-danger" id="btn-uscita" onclick="timbra('uscita')" disabled>Uscita</button>
-      </div>
-      <p style="text-align:center;margin-top:1rem">
-        <button class="btn btn-sm btn-outline" onclick="closeDipPanel()">Chiudi</button>
-      </p>
-    </div>
-  </div>
-</div>
+<!-- ═══════════════════════════════════════════
+     MODALI
+════════════════════════════════════════════ -->
 
-<!-- MODALI -->
+<!-- Modal azienda -->
 <div class="modal-bg hidden" id="modal-azienda">
   <div class="modal">
     <h3 id="modal-az-title">Nuova azienda</h3>
     <input type="hidden" id="modal-az-id">
-    <div class="form-group">
-      <label>Nome azienda *</label>
-      <input type="text" id="az-nome" placeholder="Rossi Srl">
-    </div>
-    <div class="form-group">
-      <label>Partita IVA</label>
-      <input type="text" id="az-piva" placeholder="IT00000000000">
-    </div>
+    <div class="form-group"><label>Nome azienda *</label><input type="text" id="az-nome" placeholder="Rossi Srl"></div>
+    <div class="form-group"><label>Partita IVA</label><input type="text" id="az-piva" placeholder="IT00000000000"></div>
     <div class="form-group">
       <label>URL logo (https://...)</label>
       <input type="url" id="az-logo" placeholder="https://esempio.com/logo.png" oninput="previewLogo()">
@@ -316,31 +368,20 @@ tr:hover td{background:#f8fafc}
   </div>
 </div>
 
+<!-- Modal dipendente -->
 <div class="modal-bg hidden" id="modal-dipendente">
   <div class="modal">
     <h3 id="modal-dip-title">Nuovo dipendente</h3>
     <input type="hidden" id="modal-dip-id">
     <div class="form-row">
-      <div class="form-group">
-        <label>Nome *</label>
-        <input type="text" id="dip-nome" placeholder="Mario">
-      </div>
-      <div class="form-group">
-        <label>Cognome *</label>
-        <input type="text" id="dip-cognome" placeholder="Rossi">
-      </div>
+      <div class="form-group"><label>Nome *</label><input type="text" id="dip-nome"></div>
+      <div class="form-group"><label>Cognome *</label><input type="text" id="dip-cognome"></div>
     </div>
-    <div class="form-group">
-      <label>Azienda *</label>
-      <select id="dip-azienda"></select>
-    </div>
-    <div class="form-group">
-      <label>Ruolo/Qualifica</label>
-      <input type="text" id="dip-ruolo" placeholder="Impiegato">
-    </div>
+    <div class="form-group"><label>Azienda *</label><select id="dip-azienda"></select></div>
+    <div class="form-group"><label>Ruolo/Qualifica</label><input type="text" id="dip-ruolo"></div>
     <div class="form-group">
       <label>PIN (4–6 cifre) *</label>
-      <input type="password" id="dip-pin" placeholder="••••" maxlength="6" inputmode="numeric">
+      <input type="password" id="dip-pin" maxlength="6" inputmode="numeric">
       <p style="font-size:.75rem;color:#888;margin-top:3px">Il dipendente userà questo PIN per timbrare</p>
     </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem">
@@ -350,95 +391,101 @@ tr:hover td{background:#f8fafc}
   </div>
 </div>
 
-<div class="modal-bg hidden" id="modal-qr">
+<!-- Modal link kiosk -->
+<div class="modal-bg hidden" id="modal-kiosk">
   <div class="modal" style="text-align:center">
-    <h3 id="modal-qr-title">QR Code azienda</h3>
-    <div id="modal-qr-container" style="display:inline-block;background:#fff;padding:16px;border-radius:8px;border:1px solid #e2e8f0;margin:1rem 0"></div>
-    <p style="font-size:.8rem;color:#888;margin-bottom:1rem">Stampa e appendi questo QR nella sede aziendale.<br>Si rinnova automaticamente ogni giorno.</p>
-    <button class="btn btn-outline btn-sm" onclick="closeModal('modal-qr')">Chiudi</button>
+    <h3 id="modal-kiosk-title">Pagina kiosk</h3>
+    <p style="font-size:.85rem;color:#555;margin-bottom:1rem">Apri questo link sul tablet e impostalo in modalità kiosk. Il link è permanente e non cambia mai.</p>
+    <div class="aziende-link-box" id="kiosk-link-box" style="text-align:left;margin-bottom:1rem">
+      <span id="kiosk-link-text"></span>
+      <button onclick="copyKioskLink()">Copia</button>
+    </div>
+    <div style="display:inline-block;background:#fff;padding:14px;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:1rem">
+      <div id="modal-kiosk-qr"></div>
+    </div>
+    <p style="font-size:.75rem;color:#aaa;margin-bottom:1.2rem">Scansiona per aprire il link direttamente sul tablet</p>
+    <button class="btn btn-outline btn-sm" onclick="closeModal('modal-kiosk')">Chiudi</button>
   </div>
 </div>
 
+<!-- Modal PIN admin kiosk -->
+<div class="modal-bg hidden" id="modal-kiosk-admin">
+  <div class="modal">
+    <h3>Accesso amministratore</h3>
+    <p style="font-size:.85rem;color:#555;margin-bottom:1rem">Inserisci la password admin per uscire dalla modalità kiosk.</p>
+    <div class="form-group"><label>Password admin</label><input type="password" id="kiosk-admin-pw" onkeydown="if(event.key==='Enter')kioskAdminConfirm()"></div>
+    <div style="display:flex;gap:.5rem;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm" onclick="closeModal('modal-kiosk-admin')">Annulla</button>
+      <button class="btn btn-primary btn-sm" onclick="kioskAdminConfirm()">Accedi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPT
+════════════════════════════════════════════ -->
 <script>
-// ===================== SUPABASE INIT =====================
+// ── Supabase ──────────────────────────────────────────────
 const SUPA_URL = 'https://yrkktouacsdlegqkauol.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlya2t0b3VhY3NkbGVncWthdW9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTQ0NDksImV4cCI6MjA4OTc3MDQ0OX0.-wt52AFfs9bW1TZVEBu1CUJV8nH-r_aOD5S1UJz5HUo';
-const { createClient } = supabase;
-const db = createClient(SUPA_URL, SUPA_KEY);
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-// ===================== STATE =====================
-let adminLoggedIn = false;
-let currentAziendaId = null;
-let currentDipendente = null;
-let currentPresenza = null;
+// ── State ─────────────────────────────────────────────────
+let allAziende = [], allDipendenti = [];
+let currentAziendaId = null, currentDipendente = null, currentPresenza = null;
 let pinBuffer = '';
-let allAziende = [];
-let allDipendenti = [];
+let kioskLinkForCopy = '';
 
-// ===================== INIT =====================
+// ── INIT ──────────────────────────────────────────────────
 async function init() {
-  showLoading(true);
   const now = new Date();
   document.getElementById('filter-data-pres').value = todayStr();
   document.getElementById('rep-mese').value = now.getMonth() + 1;
   document.getElementById('rep-anno').value = now.getFullYear();
 
+  // Controlla hash per kiosk: #az=UUID
   const hash = location.hash;
   if (hash.startsWith('#az=')) {
     const azId = decodeURIComponent(hash.replace('#az=', ''));
-    const token = new URLSearchParams(location.search).get('t');
-    if (token === getDailyToken(azId)) {
-      await loadAziende();
-      await loadDipendenti();
-      showLoading(false);
-      openTimbraturaPage(azId);
-    } else {
-      showLoading(false);
-      showSection('admin-login');
-      toast('QR code scaduto o non valido', 'err');
-    }
+    showLoading(true);
+    await loadAziende();
+    await loadDipendenti();
+    showLoading(false);
+    openKiosk(azId);
     return;
   }
-  showLoading(false);
+  // Altrimenti → login admin
   showSection('admin-login');
 }
 
-// ===================== LOADING =====================
+// ── SEZIONI ───────────────────────────────────────────────
+function showSection(s) {
+  ['admin-login', 'admin', 'kiosk'].forEach(id =>
+    document.getElementById('sec-' + id).classList.add('hidden'));
+  document.getElementById('sec-' + s).classList.remove('hidden');
+  document.getElementById('navbar').classList.toggle('hidden', s !== 'admin');
+}
+
 function showLoading(v) {
   document.getElementById('loading-overlay').classList.toggle('hidden', !v);
 }
 
-// ===================== SEZIONI =====================
-function showSection(s) {
-  ['admin-login', 'admin', 'timbratura'].forEach(id => {
-    document.getElementById('sec-' + id).classList.add('hidden');
-  });
-  document.getElementById('sec-' + s).classList.remove('hidden');
-  document.getElementById('btn-nav-logout').classList.toggle('hidden', s !== 'admin');
-  document.getElementById('btn-nav-admin').classList.toggle('hidden', s === 'admin');
-  document.getElementById('nav-title').textContent = s === 'admin' ? 'TimbraWeb — Admin' : 'TimbraWeb';
-}
-
-// ===================== ADMIN AUTH =====================
+// ── ADMIN AUTH ────────────────────────────────────────────
 async function adminLogin() {
   const pw = document.getElementById('admin-pw').value;
   if (!pw) { toast('Inserisci la password', 'err'); return; }
   showLoading(true);
   const { data, error } = await db.from('config').select('valore').eq('chiave', 'admin_password').single();
   showLoading(false);
-  if (error || !data) { toast('Errore di connessione al database', 'err'); return; }
+  if (error || !data) { toast('Errore di connessione', 'err'); return; }
   if (pw !== data.valore) { toast('Password errata', 'err'); return; }
-  adminLoggedIn = true;
   document.getElementById('admin-pw').value = '';
   showSection('admin');
   await renderAll();
   toast('Accesso effettuato', 'ok');
 }
 
-function logout() {
-  adminLoggedIn = false;
-  showSection('admin-login');
-}
+function logout() { showSection('admin-login'); }
 
 async function changeAdminPw() {
   const old = document.getElementById('pw-old').value;
@@ -449,15 +496,14 @@ async function changeAdminPw() {
   if (nw.length < 4) { toast('Minimo 4 caratteri', 'err'); return; }
   if (nw !== cf) { toast('Le password non coincidono', 'err'); return; }
   await db.from('config').update({ valore: nw }).eq('chiave', 'admin_password');
-  ['pw-old', 'pw-new', 'pw-confirm'].forEach(id => document.getElementById(id).value = '');
+  ['pw-old','pw-new','pw-confirm'].forEach(id => document.getElementById(id).value = '');
   toast('Password aggiornata', 'ok');
 }
 
-// ===================== TABS =====================
+// ── TABS ADMIN ────────────────────────────────────────────
 function adminTab(name, el) {
-  ['aziende', 'dipendenti', 'presenze', 'report', 'impostazioni'].forEach(t => {
-    document.getElementById('tab-' + t).classList.add('hidden');
-  });
+  ['aziende','dipendenti','presenze','report','impostazioni'].forEach(t =>
+    document.getElementById('tab-' + t).classList.add('hidden'));
   document.getElementById('tab-' + name).classList.remove('hidden');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -465,38 +511,45 @@ function adminTab(name, el) {
   if (name === 'report') populateReportSelects();
 }
 
-// ===================== RENDER ALL =====================
+// ── DATA ──────────────────────────────────────────────────
+async function loadAziende() {
+  const { data } = await db.from('aziende').select('*').order('nome');
+  allAziende = data || [];
+}
+async function loadDipendenti() {
+  const { data } = await db.from('dipendenti').select('*').order('cognome');
+  allDipendenti = data || [];
+}
 async function renderAll() {
   showLoading(true);
   await loadAziende();
   await loadDipendenti();
   showLoading(false);
-  renderAziende();
-  populateSelects();
-  renderDipendenti();
+  renderAziende(); populateSelects(); renderDipendenti();
 }
 
-// ===================== AZIENDE =====================
-async function loadAziende() {
-  const { data } = await db.from('aziende').select('*').order('nome');
-  allAziende = data || [];
-}
-
+// ── AZIENDE ───────────────────────────────────────────────
 function renderAziende() {
   const tbody = document.getElementById('tbody-aziende');
   if (!allAziende.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#aaa;padding:2rem">Nessuna azienda</td></tr>';
-    return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Nessuna azienda</td></tr>'; return;
   }
   tbody.innerHTML = allAziende.map(a => {
     const ndip = allDipendenti.filter(d => d.az_id === a.id).length;
+    const kioskUrl = buildKioskUrl(a.id);
     return `<tr>
       <td>${a.logo_url ? `<img src="${esc(a.logo_url)}" class="logo-preview" onerror="this.style.display='none'">` : '<span style="color:#ccc;font-size:.75rem">—</span>'}</td>
       <td><strong>${esc(a.nome)}</strong></td>
       <td style="color:#888;font-size:.82rem">${esc(a.piva || '—')}</td>
       <td><span class="badge badge-blue">${ndip}</span></td>
-      <td style="text-align:right">
-        <button class="btn btn-sm btn-outline" style="margin-right:4px" onclick="showQR('${a.id}')">QR</button>
+      <td>
+        <div class="aziende-link-box" style="font-size:.75rem;padding:4px 8px">
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px">${esc(kioskUrl)}</span>
+          <button onclick="copyLink('${esc(kioskUrl)}')" style="background:#1e3a5f;color:#fff;border:none;border-radius:4px;padding:2px 8px;font-size:.72rem;cursor:pointer">Copia</button>
+        </div>
+      </td>
+      <td style="text-align:right;white-space:nowrap">
+        <button class="btn btn-sm btn-primary" style="margin-right:4px" onclick="showKioskModal('${a.id}')">Kiosk</button>
         <button class="btn btn-sm btn-outline" style="margin-right:4px" onclick="editAzienda('${a.id}')">Modifica</button>
         <button class="btn btn-sm btn-danger" onclick="deleteAzienda('${a.id}')">Elimina</button>
       </td>
@@ -514,15 +567,13 @@ function resetModalAz() {
 }
 
 function editAzienda(id) {
-  const a = allAziende.find(x => x.id === id);
-  if (!a) return;
+  const a = allAziende.find(x => x.id === id); if (!a) return;
   document.getElementById('modal-az-id').value = id;
   document.getElementById('az-nome').value = a.nome;
   document.getElementById('az-piva').value = a.piva || '';
   document.getElementById('az-logo').value = a.logo_url || '';
   document.getElementById('modal-az-title').textContent = 'Modifica azienda';
-  previewLogo();
-  openModal('modal-azienda');
+  previewLogo(); openModal('modal-azienda');
 }
 
 async function saveAzienda() {
@@ -531,56 +582,39 @@ async function saveAzienda() {
   const id = document.getElementById('modal-az-id').value;
   const obj = { nome, piva: document.getElementById('az-piva').value.trim(), logo_url: document.getElementById('az-logo').value.trim() };
   showLoading(true);
-  if (id) {
-    await db.from('aziende').update(obj).eq('id', id);
-  } else {
-    await db.from('aziende').insert(obj);
-  }
-  await loadAziende();
-  showLoading(false);
-  closeModal('modal-azienda');
-  renderAziende();
-  populateSelects();
+  id ? await db.from('aziende').update(obj).eq('id', id) : await db.from('aziende').insert(obj);
+  await loadAziende(); showLoading(false);
+  closeModal('modal-azienda'); renderAziende(); populateSelects();
   toast('Azienda salvata', 'ok');
 }
 
 async function deleteAzienda(id) {
-  if (!confirm('Eliminare questa azienda? Verranno eliminati anche i dipendenti e le presenze associate.')) return;
+  if (!confirm('Eliminare questa azienda? Verranno eliminati anche dipendenti e presenze associati.')) return;
   showLoading(true);
   await db.from('aziende').delete().eq('id', id);
-  await loadAziende();
-  await loadDipendenti();
-  showLoading(false);
-  renderAziende();
-  populateSelects();
-  renderDipendenti();
+  await loadAziende(); await loadDipendenti(); showLoading(false);
+  renderAziende(); populateSelects(); renderDipendenti();
   toast('Azienda eliminata');
 }
 
 function previewLogo() {
   const url = document.getElementById('az-logo').value.trim();
   const img = document.getElementById('logo-preview');
-  if (url) { img.src = url; img.classList.remove('hidden'); }
-  else img.classList.add('hidden');
+  if (url) { img.src = url; img.classList.remove('hidden'); } else img.classList.add('hidden');
 }
 
-// ===================== DIPENDENTI =====================
-async function loadDipendenti() {
-  const { data } = await db.from('dipendenti').select('*').order('cognome');
-  allDipendenti = data || [];
-}
-
+// ── DIPENDENTI ────────────────────────────────────────────
 function populateSelects() {
   const opts = allAziende.map(a => `<option value="${a.id}">${esc(a.nome)}</option>`).join('');
-  const optsAll = `<option value="">Tutte le aziende</option>` + opts;
+  const all = `<option value="">Tutte le aziende</option>` + opts;
   document.getElementById('dip-azienda').innerHTML = opts || '<option>Nessuna azienda</option>';
-  document.getElementById('filter-az-dip').innerHTML = optsAll;
-  document.getElementById('filter-az-pres').innerHTML = optsAll;
+  document.getElementById('filter-az-dip').innerHTML = all;
+  document.getElementById('filter-az-pres').innerHTML = all;
 }
 
 function populateReportSelects() {
-  const opts = allAziende.map(a => `<option value="${a.id}">${esc(a.nome)}</option>`).join('');
-  document.getElementById('rep-azienda').innerHTML = `<option value="">Tutte le aziende</option>` + opts;
+  document.getElementById('rep-azienda').innerHTML = `<option value="">Tutte le aziende</option>` +
+    allAziende.map(a => `<option value="${a.id}">${esc(a.nome)}</option>`).join('');
   filterRepDip();
 }
 
@@ -595,15 +629,11 @@ function renderDipendenti() {
   const azFilt = document.getElementById('filter-az-dip').value;
   const filtered = azFilt ? allDipendenti.filter(d => d.az_id === azFilt) : allDipendenti;
   const tbody = document.getElementById('tbody-dipendenti');
-  if (!filtered.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Nessun dipendente</td></tr>';
-    return;
-  }
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Nessun dipendente</td></tr>'; return; }
   tbody.innerHTML = filtered.map(d => {
     const az = allAziende.find(a => a.id === d.az_id);
     return `<tr>
-      <td><strong>${esc(d.nome)}</strong></td>
-      <td>${esc(d.cognome)}</td>
+      <td><strong>${esc(d.nome)}</strong></td><td>${esc(d.cognome)}</td>
       <td style="font-size:.82rem;color:#888">${esc(az?.nome || '—')}</td>
       <td style="font-size:.82rem">${esc(d.ruolo || '—')}</td>
       <td><span class="badge ${d.attivo ? 'badge-green' : 'badge-gray'}">${d.attivo ? 'Attivo' : 'Inattivo'}</span></td>
@@ -616,17 +646,12 @@ function renderDipendenti() {
 }
 
 function resetModalDip() {
-  document.getElementById('modal-dip-id').value = '';
-  document.getElementById('dip-nome').value = '';
-  document.getElementById('dip-cognome').value = '';
-  document.getElementById('dip-ruolo').value = '';
-  document.getElementById('dip-pin').value = '';
+  ['modal-dip-id','dip-nome','dip-cognome','dip-ruolo','dip-pin'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('modal-dip-title').textContent = 'Nuovo dipendente';
 }
 
 function editDipendente(id) {
-  const d = allDipendenti.find(x => x.id === id);
-  if (!d) return;
+  const d = allDipendenti.find(x => x.id === id); if (!d) return;
   document.getElementById('modal-dip-id').value = id;
   document.getElementById('dip-nome').value = d.nome;
   document.getElementById('dip-cognome').value = d.cognome;
@@ -649,16 +674,9 @@ async function saveDipendente() {
   const obj = { nome, cognome, az_id, ruolo: document.getElementById('dip-ruolo').value.trim() };
   if (pin) obj.pin = pin;
   showLoading(true);
-  if (editId) {
-    await db.from('dipendenti').update(obj).eq('id', editId);
-  } else {
-    await db.from('dipendenti').insert(obj);
-  }
-  await loadDipendenti();
-  showLoading(false);
-  closeModal('modal-dipendente');
-  populateSelects();
-  renderDipendenti();
+  editId ? await db.from('dipendenti').update(obj).eq('id', editId) : await db.from('dipendenti').insert(obj);
+  await loadDipendenti(); showLoading(false);
+  closeModal('modal-dipendente'); populateSelects(); renderDipendenti();
   toast('Dipendente salvato', 'ok');
 }
 
@@ -666,13 +684,12 @@ async function deleteDipendente(id) {
   if (!confirm('Eliminare questo dipendente?')) return;
   showLoading(true);
   await db.from('dipendenti').delete().eq('id', id);
-  await loadDipendenti();
-  showLoading(false);
+  await loadDipendenti(); showLoading(false);
   renderDipendenti();
   toast('Dipendente eliminato');
 }
 
-// ===================== PRESENZE =====================
+// ── PRESENZE ──────────────────────────────────────────────
 async function renderPresenze() {
   const azFilt = document.getElementById('filter-az-pres').value;
   const data = document.getElementById('filter-data-pres').value || todayStr();
@@ -682,15 +699,12 @@ async function renderPresenze() {
   const { data: rows } = await query.order('created_at');
   showLoading(false);
   const tbody = document.getElementById('tbody-presenze');
-  if (!rows || !rows.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:2rem">Nessuna presenza per questa data</td></tr>';
-    return;
-  }
+  if (!rows?.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:2rem">Nessuna presenza per questa data</td></tr>'; return; }
   tbody.innerHTML = rows.map(p => {
     const stato = getStatoDip(p);
     return `<tr>
-      <td><strong>${esc((p.dipendenti?.nome || '') + ' ' + (p.dipendenti?.cognome || ''))}</strong></td>
-      <td style="font-size:.82rem;color:#888">${esc(p.aziende?.nome || '—')}</td>
+      <td><strong>${esc((p.dipendenti?.nome||'') + ' ' + (p.dipendenti?.cognome||''))}</strong></td>
+      <td style="font-size:.82rem;color:#888">${esc(p.aziende?.nome||'—')}</td>
       <td>${p.entrata ? p.entrata.slice(0,5) : '—'}</td>
       <td>${p.pausa_inizio ? p.pausa_inizio.slice(0,5) : '—'}</td>
       <td>${p.pausa_fine ? p.pausa_fine.slice(0,5) : '—'}</td>
@@ -701,105 +715,149 @@ async function renderPresenze() {
   }).join('');
 }
 
-// ===================== QR & TOKEN =====================
-function getDailyToken(azId) {
-  const d = todayStr().replace(/-/g, '');
-  let hash = 0;
-  const s = d + azId + 'tw2025';
-  for (let i = 0; i < s.length; i++) { hash = ((hash << 5) - hash) + s.charCodeAt(i); hash |= 0; }
-  return Math.abs(hash).toString(36).substring(0, 8);
-}
-
-function buildQRUrl(azId) {
+// ── KIOSK ─────────────────────────────────────────────────
+function buildKioskUrl(azId) {
   const base = location.href.split('?')[0].split('#')[0];
-  return `${base}?t=${getDailyToken(azId)}#az=${encodeURIComponent(azId)}`;
+  return `${base}#az=${encodeURIComponent(azId)}`;
 }
 
-function showQR(azId) {
+function openKiosk(azId) {
   const az = allAziende.find(a => a.id === azId);
-  if (!az) return;
-  document.getElementById('modal-qr-title').textContent = 'QR — ' + az.nome;
-  const container = document.getElementById('modal-qr-container');
-  container.innerHTML = '';
-  new QRCode(container, { text: buildQRUrl(azId), width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
-  openModal('modal-qr');
-}
-
-// ===================== TIMBRATURA =====================
-async function openTimbraturaPage(azId) {
+  if (!az) { toast('Azienda non trovata', 'err'); showSection('admin-login'); return; }
   currentAziendaId = azId;
-  const az = allAziende.find(a => a.id === azId);
-  if (!az) { toast('Azienda non trovata', 'err'); return; }
-  showSection('timbratura');
-  document.getElementById('az-nome-h2').textContent = az.nome;
-  document.getElementById('az-data-p').textContent = formatDataCompleta(new Date());
-  const logoEl = document.getElementById('az-logo-img');
+  showSection('kiosk');
+
+  // Header
+  document.getElementById('k-nome').textContent = az.nome;
+  document.getElementById('k-date').textContent = formatDataCompleta(new Date());
+  const logoEl = document.getElementById('k-logo');
   if (az.logo_url) { logoEl.src = az.logo_url; logoEl.classList.remove('hidden'); }
   else logoEl.classList.add('hidden');
-  const qrCont = document.getElementById('qr-container');
+
+  // QR — punta alla stessa pagina kiosk (link permanente)
+  const qrCont = document.getElementById('k-qr');
   qrCont.innerHTML = '';
-  new QRCode(qrCont, { text: buildQRUrl(azId), width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
-  scheduleQRRefresh(azId);
-  pinBuffer = '';
-  updatePinDisplay();
-  document.getElementById('form-pin').classList.remove('hidden');
-  document.getElementById('panel-dip').classList.add('hidden');
+  new QRCode(qrCont, { text: buildKioskUrl(azId), width: 170, height: 170, correctLevel: QRCode.CorrectLevel.M });
+
+  // Info expire QR (token giornaliero gestito lato smartphone)
+  const mezzanotte = new Date(); mezzanotte.setHours(24,0,0,0);
+  const ore = Math.floor((mezzanotte - new Date()) / 3600000);
+  const min = Math.floor(((mezzanotte - new Date()) % 3600000) / 60000);
+  document.getElementById('k-qr-expire').textContent = `Il QR si rinnova tra ${ore}h ${min}m`;
+
+  // PIN reset
+  pinBuffer = ''; updatePinDisplay();
+  closeDipPanel();
+
+  // Suggerimento fullscreen
+  setTimeout(() => document.getElementById('kiosk-tip').style.opacity = '0', 5000);
+
+  // Aggiorna data a mezzanotte
+  scheduleKioskRefresh(azId);
 }
 
-function scheduleQRRefresh(azId) {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  setTimeout(() => openTimbraturaPage(azId), midnight - now);
+function scheduleKioskRefresh(azId) {
+  const now = new Date(), midnight = new Date(now);
+  midnight.setHours(24,0,0,0);
+  setTimeout(() => openKiosk(azId), midnight - now);
 }
 
-// ===================== PIN =====================
+// Pulsante Admin nel kiosk
+function kioskAdminRequest() {
+  document.getElementById('kiosk-admin-pw').value = '';
+  openModal('modal-kiosk-admin');
+  setTimeout(() => document.getElementById('kiosk-admin-pw').focus(), 100);
+}
+
+async function kioskAdminConfirm() {
+  const pw = document.getElementById('kiosk-admin-pw').value;
+  const { data } = await db.from('config').select('valore').eq('chiave', 'admin_password').single();
+  if (pw !== data?.valore) { toast('Password errata', 'err'); return; }
+  closeModal('modal-kiosk-admin');
+  // Torna all'admin senza ricaricare la pagina
+  location.hash = '';
+  showSection('admin');
+  await renderAll();
+  toast('Modalità admin attiva', 'ok');
+}
+
+// Modal kiosk link
+function showKioskModal(azId) {
+  const az = allAziende.find(a => a.id === azId); if (!az) return;
+  const url = buildKioskUrl(azId);
+  kioskLinkForCopy = url;
+  document.getElementById('modal-kiosk-title').textContent = 'Pagina kiosk — ' + az.nome;
+  document.getElementById('kiosk-link-text').textContent = url;
+  const qrCont = document.getElementById('modal-kiosk-qr');
+  qrCont.innerHTML = '';
+  new QRCode(qrCont, { text: url, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+  openModal('modal-kiosk');
+}
+
+function copyKioskLink() { copyLink(kioskLinkForCopy); }
+function copyLink(url) {
+  navigator.clipboard.writeText(url).then(() => toast('Link copiato', 'ok')).catch(() => toast('Copia non riuscita', 'err'));
+}
+
+// ── PIN KIOSK ─────────────────────────────────────────────
 function pinDigit(d) { if (pinBuffer.length >= 6) return; pinBuffer += d; updatePinDisplay(); }
-function pinClear() { pinBuffer = ''; updatePinDisplay(); }
-function updatePinDisplay() { document.getElementById('pin-display').textContent = pinBuffer ? '●'.repeat(pinBuffer.length) : '—'; }
+function pinDel() { pinBuffer = pinBuffer.slice(0, -1); updatePinDisplay(); }
+function updatePinDisplay() {
+  document.getElementById('k-pin-display').textContent = pinBuffer ? '●'.repeat(pinBuffer.length) : '—';
+}
 
 async function pinConfirm() {
   if (!pinBuffer) { toast('Inserisci il PIN', 'err'); return; }
   const dip = allDipendenti.filter(d => d.az_id === currentAziendaId).find(d => d.pin === pinBuffer);
-  pinBuffer = '';
-  updatePinDisplay();
+  const enteredPin = pinBuffer;
+  pinBuffer = ''; updatePinDisplay();
   if (!dip) { toast('PIN non riconosciuto', 'err'); return; }
   currentDipendente = dip;
   showLoading(true);
   const { data } = await db.from('presenze').select('*').eq('dip_id', dip.id).eq('data', todayStr()).maybeSingle();
   currentPresenza = data;
   showLoading(false);
-  openDipPanel(dip);
+  showDipPanel(dip);
 }
 
-function openDipPanel(dip) {
-  document.getElementById('form-pin').classList.add('hidden');
-  document.getElementById('panel-dip').classList.remove('hidden');
-  document.getElementById('dip-avatar').textContent = ((dip.nome[0] || '') + (dip.cognome[0] || '')).toUpperCase();
-  document.getElementById('dip-nome-panel').textContent = dip.nome + ' ' + dip.cognome;
-  document.getElementById('dip-ruolo-panel').textContent = dip.ruolo || '';
-  updateAzioniDip();
+function showDipPanel(dip) {
+  document.getElementById('k-pin-panel').querySelector('.pin-grid').style.opacity = '.3';
+  document.getElementById('k-pin-panel').querySelector('.pin-grid').style.pointerEvents = 'none';
+  const panel = document.getElementById('k-dip-panel');
+  panel.classList.add('show');
+  document.getElementById('k-dip-avatar').textContent = ((dip.nome[0]||'')+(dip.cognome[0]||'')).toUpperCase();
+  document.getElementById('k-dip-nome').textContent = dip.nome + ' ' + dip.cognome;
+  document.getElementById('k-dip-ruolo').textContent = dip.ruolo || '';
+  updateKioskButtons();
 }
 
-function updateAzioniDip() {
+function closeDipPanel() {
+  currentDipendente = null; currentPresenza = null;
+  const panel = document.getElementById('k-dip-panel');
+  panel.classList.remove('show');
+  const grid = document.getElementById('k-pin-panel').querySelector('.pin-grid');
+  grid.style.opacity = '1'; grid.style.pointerEvents = 'auto';
+  pinBuffer = ''; updatePinDisplay();
+}
+
+function updateKioskButtons() {
   const pr = currentPresenza || {};
   const stato = getStatoDip(pr);
-  document.getElementById('dip-stato-badge').textContent = stato.label;
-  document.getElementById('dip-stato-badge').className = 'badge ' + stato.cls;
-  document.getElementById('btn-entrata').disabled = !!pr.entrata;
-  document.getElementById('btn-pausa-in').disabled = !pr.entrata || !!pr.pausa_inizio || !!pr.uscita;
-  document.getElementById('btn-pausa-out').disabled = !pr.pausa_inizio || !!pr.pausa_fine || !!pr.uscita;
-  document.getElementById('btn-uscita').disabled = !pr.entrata || !!pr.uscita || (!!pr.pausa_inizio && !pr.pausa_fine);
+  document.getElementById('k-dip-stato').textContent = stato.label;
+  document.getElementById('k-dip-stato').className = 'badge ' + stato.cls;
+  document.getElementById('k-btn-entrata').disabled  = !!pr.entrata;
+  document.getElementById('k-btn-pausa-in').disabled = !pr.entrata || !!pr.pausa_inizio || !!pr.uscita;
+  document.getElementById('k-btn-pausa-out').disabled= !pr.pausa_inizio || !!pr.pausa_fine || !!pr.uscita;
+  document.getElementById('k-btn-uscita').disabled   = !pr.entrata || !!pr.uscita || (!!pr.pausa_inizio && !pr.pausa_fine);
 }
 
 async function timbra(tipo) {
-  const ora = nowTime();
-  const oggi = todayStr();
+  const ora = nowTime(), oggi = todayStr();
   const update = {};
-  if (tipo === 'entrata') update.entrata = ora;
-  else if (tipo === 'pausa_inizio') update.pausa_inizio = ora;
-  else if (tipo === 'pausa_fine') update.pausa_fine = ora;
-  else if (tipo === 'uscita') update.uscita = ora;
+  if (tipo === 'entrata')      update.entrata = ora;
+  if (tipo === 'pausa_inizio') update.pausa_inizio = ora;
+  if (tipo === 'pausa_fine')   update.pausa_fine = ora;
+  if (tipo === 'uscita')       update.uscita = ora;
   showLoading(true);
   if (currentPresenza) {
     const { data } = await db.from('presenze').update(update).eq('id', currentPresenza.id).select().single();
@@ -809,43 +867,33 @@ async function timbra(tipo) {
     currentPresenza = data;
   }
   showLoading(false);
-  updateAzioniDip();
-  const labels = { entrata: 'Entrata registrata', pausa_inizio: 'Inizio pausa registrato', pausa_fine: 'Fine pausa registrata', uscita: 'Uscita registrata' };
+  updateKioskButtons();
+  const labels = { entrata:'Entrata registrata', pausa_inizio:'Inizio pausa registrato', pausa_fine:'Fine pausa registrata', uscita:'Uscita registrata' };
   toast(labels[tipo] + ' — ' + ora, 'ok');
-  if (tipo === 'uscita') setTimeout(() => closeDipPanel(), 2000);
+  if (tipo === 'uscita') setTimeout(() => closeDipPanel(), 2200);
 }
 
-function closeDipPanel() {
-  currentDipendente = null;
-  currentPresenza = null;
-  document.getElementById('panel-dip').classList.add('hidden');
-  document.getElementById('form-pin').classList.remove('hidden');
-}
-
-// ===================== REPORT CSV =====================
+// ── REPORT CSV ────────────────────────────────────────────
 async function exportCSV() {
   const azFilt = document.getElementById('rep-azienda').value;
   const mese = parseInt(document.getElementById('rep-mese').value);
   const anno = parseInt(document.getElementById('rep-anno').value);
   const dipFilt = document.getElementById('rep-dipendente').value;
-  const meseStr = String(mese).padStart(2, '0');
-  const dataInizio = `${anno}-${meseStr}-01`;
-  const dataFine = `${anno}-${meseStr}-31`;
+  const meseStr = String(mese).padStart(2,'0');
   showLoading(true);
-  let query = db.from('presenze')
-    .select('*, dipendenti(nome,cognome,ruolo), aziende(nome)')
-    .gte('data', dataInizio).lte('data', dataFine);
+  let query = db.from('presenze').select('*, dipendenti(nome,cognome,ruolo), aziende(nome)')
+    .gte('data', `${anno}-${meseStr}-01`).lte('data', `${anno}-${meseStr}-31`);
   if (azFilt) query = query.eq('az_id', azFilt);
   if (dipFilt) query = query.eq('dip_id', dipFilt);
-  const { data: rows } = await query.order('data').order('az_id');
+  const { data: rows } = await query.order('data');
   showLoading(false);
-  if (!rows || !rows.length) { toast('Nessun dato per il periodo selezionato', 'err'); return; }
-  const header = ['Azienda', 'Nome', 'Cognome', 'Ruolo', 'Data', 'Entrata', 'Inizio pausa', 'Fine pausa', 'Uscita', 'Ore lavorate'];
+  if (!rows?.length) { toast('Nessun dato per il periodo selezionato', 'err'); return; }
+  const header = ['Azienda','Nome','Cognome','Ruolo','Data','Entrata','Inizio pausa','Fine pausa','Uscita','Ore lavorate'];
   const csvRows = rows.map(p => [
-    p.aziende?.nome || '', p.dipendenti?.nome || '', p.dipendenti?.cognome || '', p.dipendenti?.ruolo || '',
-    p.data, p.entrata ? p.entrata.slice(0,5) : '', p.pausa_inizio ? p.pausa_inizio.slice(0,5) : '',
-    p.pausa_fine ? p.pausa_fine.slice(0,5) : '', p.uscita ? p.uscita.slice(0,5) : '', calcolaOre(p)
-  ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(';'));
+    p.aziende?.nome||'', p.dipendenti?.nome||'', p.dipendenti?.cognome||'', p.dipendenti?.ruolo||'',
+    p.data, p.entrata?.slice(0,5)||'', p.pausa_inizio?.slice(0,5)||'',
+    p.pausa_fine?.slice(0,5)||'', p.uscita?.slice(0,5)||'', calcolaOre(p)
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(';'));
   const csv = '\uFEFF' + [header.join(';'), ...csvRows].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -855,37 +903,36 @@ async function exportCSV() {
   toast('CSV esportato', 'ok');
 }
 
-// ===================== UTILS =====================
+// ── UTILS ─────────────────────────────────────────────────
 function getStatoDip(pr) {
-  if (!pr || !pr.entrata) return { label: 'Non presente', cls: 'badge-gray' };
-  if (pr.uscita) return { label: 'Uscito', cls: 'badge-red' };
-  if (pr.pausa_inizio && !pr.pausa_fine) return { label: 'In pausa', cls: 'badge-yellow' };
-  if (pr.entrata) return { label: 'Presente', cls: 'badge-green' };
-  return { label: '—', cls: 'badge-gray' };
+  if (!pr?.entrata) return { label:'Non presente', cls:'badge-gray' };
+  if (pr.uscita) return { label:'Uscito', cls:'badge-red' };
+  if (pr.pausa_inizio && !pr.pausa_fine) return { label:'In pausa', cls:'badge-yellow' };
+  return { label:'Presente', cls:'badge-green' };
 }
 
 function calcolaOre(pr) {
   if (!pr?.entrata) return '—';
-  const toMin = t => { const [h, m] = t.slice(0,5).split(':').map(Number); return h * 60 + m; };
-  let lav = toMin(pr.uscita || nowTime()) - toMin(pr.entrata);
-  if (pr.pausa_inizio && pr.pausa_fine) lav -= (toMin(pr.pausa_fine) - toMin(pr.pausa_inizio));
-  else if (pr.pausa_inizio && !pr.pausa_fine) lav -= (toMin(pr.uscita || nowTime()) - toMin(pr.pausa_inizio));
+  const toMin = t => { const [h,m] = t.slice(0,5).split(':').map(Number); return h*60+m; };
+  let lav = toMin(pr.uscita||nowTime()) - toMin(pr.entrata);
+  if (pr.pausa_inizio && pr.pausa_fine) lav -= toMin(pr.pausa_fine) - toMin(pr.pausa_inizio);
+  else if (pr.pausa_inizio && !pr.pausa_fine) lav -= toMin(pr.uscita||nowTime()) - toMin(pr.pausa_inizio);
   if (lav < 0) lav = 0;
-  return `${Math.floor(lav / 60)}h ${String(lav % 60).padStart(2, '0')}m`;
+  return `${Math.floor(lav/60)}h ${String(lav%60).padStart(2,'0')}m`;
 }
 
 function todayStr() { return new Date().toISOString().split('T')[0]; }
-function nowTime() { const d = new Date(); return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0'); }
-function esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-function formatDataCompleta(d) { return d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+function nowTime() { const d = new Date(); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); }
+function esc(s) { return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function formatDataCompleta(d) { return d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
 function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 let toastTimer = null;
-function toast(msg, type = '') {
+function toast(msg, type='') {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'toast show' + (type === 'ok' ? ' toast-ok' : type === 'err' ? ' toast-err' : '');
+  el.className = 'toast show' + (type==='ok'?' toast-ok':type==='err'?' toast-err':'');
   if (toastTimer) clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }

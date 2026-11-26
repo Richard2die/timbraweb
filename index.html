@@ -176,10 +176,16 @@ tr:hover td{background:var(--navy-light)}
       <!-- pannello supervisor -->
       <div id="login-panel-supervisor" class="hidden">
         <div class="form-group">
-          <label>Password supervisore</label>
+          <label>Azienda</label>
+          <select id="supervisor-az" style="width:100%">
+            <option value="">— Seleziona azienda —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Password azienda</label>
           <input type="password" id="supervisor-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')supervisorLogin()">
         </div>
-        <button class="btn btn-primary" style="width:100%;margin-bottom:.5rem" onclick="supervisorLogin()">Accedi come supervisore</button>
+        <button class="btn btn-primary" style="width:100%;margin-bottom:.5rem" onclick="supervisorLogin()">Accedi</button>
         <div class="login-divider">oppure</div>
         <button class="btn-supervisor" onclick="switchLoginPanel('admin')">← Accedi come amministratore</button>
       </div>
@@ -312,20 +318,8 @@ tr:hover td{background:var(--navy-light)}
           <button class="btn btn-primary" onclick="changeAdminPw()">Aggiorna password admin</button>
         </div>
         <div class="card">
-          <h3 style="font-size:.9rem;margin-bottom:1rem;color:var(--navy)">Cambia password supervisore</h3>
-          <div class="form-group">
-            <label>Password attuale supervisore</label>
-            <input type="password" id="sv-pw-old" placeholder="••••••••">
-          </div>
-          <div class="form-group">
-            <label>Nuova password supervisore</label>
-            <input type="password" id="sv-pw-new" placeholder="••••••••">
-          </div>
-          <div class="form-group">
-            <label>Conferma nuova password</label>
-            <input type="password" id="sv-pw-confirm" placeholder="••••••••">
-          </div>
-          <button class="btn btn-primary" onclick="changeSupervisorPw()">Aggiorna password supervisore</button>
+          <h3 style="font-size:.9rem;margin-bottom:1rem;color:var(--navy)">Password accesso aziende</h3>
+          <p style="font-size:.82rem;color:var(--muted);line-height:1.5">La password di accesso per ogni azienda si configura nella scheda <strong>Aziende</strong>, aprendo il modal di modifica di ciascuna azienda.</p>
         </div>
       </div>
     </div>
@@ -408,6 +402,11 @@ tr:hover td{background:var(--navy-light)}
       <input type="url" id="az-logo" placeholder="https://esempio.com/logo.png" oninput="previewLogo()">
       <img id="logo-preview" class="logo-preview hidden" style="margin-top:6px" src="" alt="preview">
     </div>
+    <div class="form-group">
+      <label>Password accesso supervisore azienda</label>
+      <input type="password" id="az-supervisor-pw" placeholder="Lascia vuoto per nessun accesso" autocomplete="new-password">
+      <span style="font-size:.72rem;color:var(--muted)">Il supervisore di questa azienda userà questa password per accedere ai propri dati</span>
+    </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem">
       <button class="btn btn-outline btn-sm" onclick="closeModal('modal-azienda')">Annulla</button>
       <button class="btn btn-primary btn-sm" onclick="saveAzienda()">Salva</button>
@@ -459,6 +458,7 @@ const db = createClient(SUPA_URL, SUPA_KEY);
 // ===================== STATE =====================
 let adminLoggedIn = false;
 let supervisorLoggedIn = false;
+let supervisorAzId = null;
 let currentAziendaId = null;
 let currentDipendente = null;
 // timbrature di oggi per il dipendente corrente (array ordinato per ora)
@@ -515,9 +515,12 @@ async function adminLogin() {
   if (error || !data) { toast('Errore di connessione al database', 'err'); return; }
   if (pw !== data.valore) { toast('Password errata', 'err'); return; }
   adminLoggedIn = true;
+  supervisorLoggedIn = false;
+  supervisorAzId = null;
   document.getElementById('admin-pw').value = '';
-  // Ripristina tutte le tab (nel caso si riacceda dopo supervisor)
+  // Ripristina tutte le tab e i filtri (nel caso si riacceda dopo supervisor)
   document.querySelectorAll('.tab[data-admin-only]').forEach(t => t.style.display = '');
+  unlockSupervisorFilters();
   showSection('admin');
   await renderAll();
   toast('Accesso effettuato', 'ok');
@@ -526,35 +529,68 @@ async function adminLogin() {
 function logout() {
   adminLoggedIn = false;
   supervisorLoggedIn = false;
+  supervisorAzId = null;
+  unlockSupervisorFilters();
+  document.querySelectorAll('.tab[data-admin-only]').forEach(t => t.style.display = '');
   showSection('admin-login');
   switchLoginPanel('admin');
 }
 
 // ===================== SUPERVISOR AUTH =====================
-function switchLoginPanel(panel) {
+async function switchLoginPanel(panel) {
   document.getElementById('login-panel-admin').classList.toggle('hidden', panel !== 'admin');
   document.getElementById('login-panel-supervisor').classList.toggle('hidden', panel !== 'supervisor');
   document.getElementById('admin-pw').value = '';
   document.getElementById('supervisor-pw').value = '';
+  // Quando si apre il pannello supervisore, carica le aziende se non ancora caricate
+  if (panel === 'supervisor' && allAziende.length === 0) {
+    showLoading(true);
+    await loadAziende();
+    showLoading(false);
+    populateSelects();
+  }
 }
 
 async function supervisorLogin() {
+  const azId = document.getElementById('supervisor-az').value;
   const pw = document.getElementById('supervisor-pw').value;
+  if (!azId) { toast('Seleziona l\'azienda', 'err'); return; }
   if (!pw) { toast('Inserisci la password', 'err'); return; }
-  showLoading(true);
-  const { data, error } = await db.from('config').select('valore').eq('chiave', 'supervisor_password').single();
-  showLoading(false);
-  if (error || !data) { toast('Password supervisore non configurata. Contatta l\'amministratore.', 'err'); return; }
-  if (pw !== data.valore) { toast('Password errata', 'err'); return; }
+  const azienda = allAziende.find(a => a.id === azId);
+  if (!azienda || !azienda.supervisor_password) { toast('Accesso non configurato per questa azienda', 'err'); return; }
+  if (pw !== azienda.supervisor_password) { toast('Password errata', 'err'); return; }
   supervisorLoggedIn = true;
+  supervisorAzId = azId;
   document.getElementById('supervisor-pw').value = '';
-  showSection('admin');
-  await renderAll();
-  // Nascondi le tab non permesse al supervisore e attiva Presenze
+  document.getElementById('supervisor-az').value = '';
+  showLoading(true);
+  await loadDipendenti();
+  showLoading(false);
+  // Nascondi le tab admin-only e mostra la dashboard
   document.querySelectorAll('.tab[data-admin-only]').forEach(t => t.style.display = 'none');
+  showSection('admin');
+  // Filtra e blocca i filtri sulla propria azienda
+  lockSupervisorFilters(azId);
   const presenzeTab = document.querySelector('.tab[onclick*="presenze"]');
   if (presenzeTab) adminTab('presenze', presenzeTab);
-  toast('Accesso supervisore effettuato', 'ok');
+  toast(`Accesso effettuato — ${esc(azienda.nome)}`, 'ok');
+}
+
+function lockSupervisorFilters(azId) {
+  const selPres = document.getElementById('filter-az-pres');
+  selPres.value = azId;
+  selPres.disabled = true;
+  const selRep = document.getElementById('rep-azienda');
+  if (selRep) { selRep.value = azId; selRep.disabled = true; filterRepDip(); }
+  const selDip = document.getElementById('filter-az-dip');
+  if (selDip) { selDip.value = azId; selDip.disabled = true; }
+}
+
+function unlockSupervisorFilters() {
+  ['filter-az-pres','rep-azienda','filter-az-dip'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el.disabled = false; }
+  });
 }
 
 function goAdmin() {
@@ -576,24 +612,6 @@ async function changeAdminPw() {
   toast('Password amministratore aggiornata', 'ok');
 }
 
-async function changeSupervisorPw() {
-  const old = document.getElementById('sv-pw-old').value;
-  const nw = document.getElementById('sv-pw-new').value;
-  const cf = document.getElementById('sv-pw-confirm').value;
-  if (!old || !nw) { toast('Compila tutti i campi', 'err'); return; }
-  if (nw.length < 4) { toast('Minimo 4 caratteri', 'err'); return; }
-  if (nw !== cf) { toast('Le password non coincidono', 'err'); return; }
-  const { data } = await db.from('config').select('valore').eq('chiave', 'supervisor_password').single();
-  if (!data) {
-    // Prima configurazione: crea la riga
-    await db.from('config').insert({ chiave: 'supervisor_password', valore: nw });
-  } else {
-    if (old !== data.valore) { toast('Password attuale errata', 'err'); return; }
-    await db.from('config').update({ valore: nw }).eq('chiave', 'supervisor_password');
-  }
-  ['sv-pw-old', 'sv-pw-new', 'sv-pw-confirm'].forEach(id => document.getElementById(id).value = '');
-  toast('Password supervisore aggiornata', 'ok');
-}
 
 // ===================== TABS =====================
 function adminTab(name, el) {
@@ -650,6 +668,7 @@ function resetModalAz() {
   document.getElementById('az-nome').value = '';
   document.getElementById('az-piva').value = '';
   document.getElementById('az-logo').value = '';
+  document.getElementById('az-supervisor-pw').value = '';
   document.getElementById('logo-preview').classList.add('hidden');
   document.getElementById('modal-az-title').textContent = 'Nuova azienda';
 }
@@ -661,6 +680,7 @@ function editAzienda(id) {
   document.getElementById('az-nome').value = a.nome;
   document.getElementById('az-piva').value = a.piva || '';
   document.getElementById('az-logo').value = a.logo_url || '';
+  document.getElementById('az-supervisor-pw').value = '';  // non mostrare la pw esistente
   document.getElementById('modal-az-title').textContent = 'Modifica azienda';
   previewLogo();
   openModal('modal-azienda');
@@ -670,7 +690,10 @@ async function saveAzienda() {
   const nome = document.getElementById('az-nome').value.trim();
   if (!nome) { toast('Inserisci il nome azienda', 'err'); return; }
   const id = document.getElementById('modal-az-id').value;
+  const svPw = document.getElementById('az-supervisor-pw').value;
   const obj = { nome, piva: document.getElementById('az-piva').value.trim(), logo_url: document.getElementById('az-logo').value.trim() };
+  // Aggiorna la password supervisore solo se è stata inserita
+  if (svPw) obj.supervisor_password = svPw;
   showLoading(true);
   if (id) {
     await db.from('aziende').update(obj).eq('id', id);
@@ -717,6 +740,14 @@ function populateSelects() {
   document.getElementById('dip-azienda').innerHTML = opts || '<option>Nessuna azienda</option>';
   document.getElementById('filter-az-dip').innerHTML = optsAll;
   document.getElementById('filter-az-pres').innerHTML = optsAll;
+  // Popola il select azienda nel pannello login supervisore
+  // Solo aziende con password configurata
+  const optsLogin = allAziende
+    .filter(a => a.supervisor_password)
+    .map(a => `<option value="${a.id}">${esc(a.nome)}</option>`)
+    .join('');
+  const svSelect = document.getElementById('supervisor-az');
+  if (svSelect) svSelect.innerHTML = `<option value="">— Seleziona azienda —</option>` + optsLogin;
 }
 
 function populateReportSelects() {

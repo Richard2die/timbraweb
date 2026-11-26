@@ -577,19 +577,30 @@ async function supervisorLogin() {
 }
 
 function lockSupervisorFilters(azId) {
-  const selPres = document.getElementById('filter-az-pres');
-  selPres.value = azId;
-  selPres.disabled = true;
-  const selRep = document.getElementById('rep-azienda');
-  if (selRep) { selRep.value = azId; selRep.disabled = true; filterRepDip(); }
-  const selDip = document.getElementById('filter-az-dip');
-  if (selDip) { selDip.value = azId; selDip.disabled = true; }
+  const az = allAziende.find(a => a.id === azId);
+  const nomeAz = az ? az.nome : '';
+  // Sostituisce i select con un'etichetta fissa non modificabile
+  ['filter-az-pres','rep-azienda','filter-az-dip'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = 'none';
+    // Inserisce badge fisso accanto al select
+    const badge = document.createElement('span');
+    badge.className = 'badge badge-blue supervisor-az-badge';
+    badge.textContent = nomeAz;
+    badge.style.cssText = 'font-size:.82rem;padding:5px 12px;border-radius:6px';
+    el.parentNode.insertBefore(badge, el.nextSibling);
+  });
+  filterRepDip();
+  renderPresenze();
 }
 
 function unlockSupervisorFilters() {
+  // Rimuovi i badge fissi e ripristina i select
+  document.querySelectorAll('.supervisor-az-badge').forEach(b => b.remove());
   ['filter-az-pres','rep-azienda','filter-az-dip'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.value = ''; el.disabled = false; }
+    if (el) { el.style.display = ''; el.value = ''; el.disabled = false; }
   });
 }
 
@@ -846,7 +857,8 @@ async function deleteDipendente(id) {
 
 // ===================== PRESENZE ADMIN (legge da timbrature) =====================
 async function renderPresenze() {
-  const azFilt = document.getElementById('filter-az-pres').value;
+  // Se loggato come supervisore, forza SEMPRE il filtro sulla sua azienda (ignora il select)
+  const azFilt = supervisorLoggedIn ? supervisorAzId : document.getElementById('filter-az-pres').value;
   const dataFilt = document.getElementById('filter-data-pres').value || todayStr();
   let query = db.from('timbrature').select('*, dipendenti(nome,cognome,az_id), aziende(nome)').eq('data', dataFilt);
   if (azFilt) query = query.eq('az_id', azFilt);
@@ -1035,7 +1047,8 @@ function closeDipPanel() {
 
 // ===================== REPORT EXCEL =====================
 async function exportExcel() {
-  const azFilt = document.getElementById('rep-azienda').value;
+  // Se loggato come supervisore, forza SEMPRE il filtro sulla sua azienda
+  const azFilt = supervisorLoggedIn ? supervisorAzId : document.getElementById('rep-azienda').value;
   const mese = parseInt(document.getElementById('rep-mese').value);
   const anno = parseInt(document.getElementById('rep-anno').value);
   const dipFilt = document.getElementById('rep-dipendente').value;
